@@ -1,0 +1,66 @@
+void findmax(){//动态规划0-1背包
+    int i,j;
+    for(i=1;i<number;i++){
+        for(j=1;j<=capacity;j++){//capapcity 表示总容量
+            if(j<w[i])//剩余的容量j<第i个物品的重量
+            {
+                v[i][j]=v[i-1][j];//v[i][j]当前背包容量 j，前 i 个物品最佳组合对应的价值
+
+            }
+            else//能装的下
+            {
+                if(v[i-1][j]<v[i-1][j-w[i]]+v[i])//若装了i之后价值更大
+                {
+                    v[i][j]=v[i-1][j-w[i]]+v[i];
+
+                }
+                else{
+                    v[i][j]=v[i-1][j];
+
+                }
+            }
+        }
+    }
+
+}
+
+
+void Findwhat(int i,int j){
+    if (i>0)
+    {
+        if(v[i][j]==v[i-1][j])//说明没有装i
+        {
+            visited[i]=0;//标记未选择
+            Findwhat(i-1,j);
+
+
+        }
+        else if (j=w[i]>0&&v[i][j]=v[i-1][j+w[i]]+v[i])
+        {
+            visited[i]=1;
+            Findwhat(i-1,j-w[i])//递归查找装包i之前的位置
+        }
+
+
+        }
+    }
+  //////*/  ////////空间优化大法好
+//    每一次V(i)(j)改变的值只与V(i-1)(x) {x:1...j}有关，V(i-1)(x)是前一次i循环保存下来的值；
+//
+//　　因此，可以将V缩减成一维数组，从而达到优化空间的目的，状态转移方程转换为 B(j)= max{B(j), B(j-w(i))+v(i)}；
+
+//状态转移方程，每一次推导V(i)(j)是通过V(i-1)(j-w(i))来推导的，
+//所以一维数组中j的扫描顺序应该从大到小(capacity到0)，否者前一次循环保存下来的值将会被修改，从而造成错误。
+void FindBetter(){
+    int i ,j;
+    for(i=1;i<number;i++){
+        for(j=capacity;j>0;j--)
+        {
+            if(B[j]<=B[j-w[i]]+v[i]&&j-w[i]>=0)//
+                B[j]=B[j-w[i]]+v[i];
+
+        }
+
+    }
+}
+//但这种方法找不到解的构成
